@@ -1,4 +1,4 @@
-$ports = @(3100, 8000)
+$ports = @(3100, 8000, 11434)
 
 foreach ($port in $ports) {
   $connection = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue |

@@ -6,6 +6,7 @@ set "BACKEND_DIR=%ROOT%backend"
 set "FRONTEND_DIR=%ROOT%frontend"
 set "FRONTEND_PORT=3100"
 set "VENV_PYTHON=%BACKEND_DIR%\.venv\Scripts\python.exe"
+set "OLLAMA_EXE=C:\Users\arees\AppData\Local\Programs\Ollama\ollama.exe"
 
 if not exist "%VENV_PYTHON%" (
   echo Creating backend virtual environment...
@@ -18,7 +19,7 @@ if not exist "%VENV_PYTHON%" (
 )
 
 echo Checking backend dependencies...
-"%VENV_PYTHON%" -c "import fastapi,uvicorn,sqlalchemy,pydantic,openai" >nul 2>&1
+"%VENV_PYTHON%" -c "import fastapi,uvicorn,sqlalchemy,pydantic,pypdf,docx" >nul 2>&1
 if errorlevel 1 (
   echo Installing backend dependencies...
   "%VENV_PYTHON%" -m pip install -r "%BACKEND_DIR%\requirements.txt"
@@ -26,6 +27,15 @@ if errorlevel 1 (
     echo Failed to install backend dependencies.
     pause
     exit /b 1
+  )
+)
+
+curl -s http://127.0.0.1:11434/api/tags >nul 2>&1
+if errorlevel 1 (
+  if exist "%OLLAMA_EXE%" (
+    echo Starting Ollama on http://127.0.0.1:11434
+    start "Ollama" "%OLLAMA_EXE%" serve
+    timeout /t 3 /nobreak >nul
   )
 )
 

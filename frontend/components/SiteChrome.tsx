@@ -20,8 +20,8 @@ export function SiteChrome() {
           <div className="page-shell demo-banner-inner">
             <strong>Demo mode active</strong>
             <span>
-              CareerCopilot is using deterministic mock AI outputs until a valid
-              `OPENAI_API_KEY` is configured.
+              CareerCopilot is showing stable demo outputs for the public build.
+              The full local version runs against an Ollama model backend.
             </span>
           </div>
         </div>

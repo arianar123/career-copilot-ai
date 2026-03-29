@@ -36,7 +36,7 @@ CareerCopilot AI turns career prep into a connected workflow:
 - It focuses on outcomes, not generic advice.
 - It combines multiple AI-assisted workflows into one experience.
 - It is easy to demo live because the product has a clear narrative from problem to improvement.
-- It includes safe demo-mode fallbacks so the experience remains stable even without live model access.
+- It includes a stable public demo build plus a real local AI mode for deeper testing.
 
 ## Key Features
 
@@ -53,7 +53,7 @@ CareerCopilot AI turns career prep into a connected workflow:
 - Frontend: Next.js App Router
 - Backend: FastAPI
 - Database: SQLite locally, `DATABASE_URL`-ready for Postgres
-- AI integration: OpenAI-compatible response workflow with safe mock fallback
+- AI integration: local `Ollama` workflow, with a public demo-safe frontend mode
 - Styling: Custom CSS with intentional visual polish
 
 ## Demo Flow

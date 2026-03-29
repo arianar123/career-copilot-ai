@@ -18,7 +18,7 @@ def _ollama_base_url() -> str:
 
 
 def _ollama_model() -> str:
-    model = os.getenv("OLLAMA_MODEL", "qwen3").strip()
+    model = os.getenv("OLLAMA_MODEL", "qwen2.5:1.5b").strip()
     if not model:
         raise ServiceConfigurationError(
             "OLLAMA_MODEL is not configured. Set it to an installed Ollama model."

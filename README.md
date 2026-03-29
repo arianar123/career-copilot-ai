@@ -25,7 +25,7 @@ The app now uses `Ollama` instead of OpenAI.
 Recommended local setup:
 
 ```bash
-ollama pull qwen3
+ollama pull qwen2.5:1.5b
 ollama serve
 ```
 
@@ -83,7 +83,7 @@ Backend environment variables:
 DATABASE_URL=sqlite:///./career_copilot.db
 CORS_ORIGINS=http://127.0.0.1:3100,http://localhost:3100
 OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=qwen3
+OLLAMA_MODEL=qwen2.5:1.5b
 ```
 
 ## Windows Startup Scripts
@@ -103,6 +103,8 @@ If PowerShell script execution is blocked, use:
 start-local.cmd
 open-local.cmd
 ```
+
+The launch scripts will try to start Ollama automatically when it is installed in the default Windows location.
 
 ## Important Notes
 

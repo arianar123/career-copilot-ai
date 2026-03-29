@@ -22,7 +22,7 @@ CareerCopilot AI helps students turn career prep into a connected workflow inste
 
 ## Inspiration
 
-Students often jump between separate tools for resumes, job research, interview prep, and progress tracking. That creates friction and confusion, especially for people who are still figuring out how to position themselves. I wanted to build something that feels less like “another AI chatbot” and more like a personal career operating system.
+Students often jump between separate tools for resumes, job research, interview prep, and progress tracking. That creates friction and confusion, especially for people who are still figuring out how to position themselves. I wanted to build something that feels less like "another AI chatbot" and more like a personal career operating system.
 
 ## How We Built It
 
@@ -31,7 +31,7 @@ CareerCopilot AI uses:
 - `Next.js` for the frontend experience
 - `FastAPI` for the backend API
 - `SQLite` for local persistence, with `DATABASE_URL` support for future hosted databases
-- an OpenAI-compatible workflow for AI responses, with a safe mock fallback for demo stability
+- `Ollama` for the local AI workflow, with a stable public demo mode for submission reliability
 
 The system was built as a connected set of workflows:
 
@@ -44,15 +44,15 @@ The system was built as a connected set of workflows:
 ## Challenges We Ran Into
 
 - making the product feel like one coherent workflow instead of multiple disconnected AI tools
-- keeping the demo stable even when live API access is unavailable
+- keeping the public demo stable while the full local version runs against a real model
 - balancing a polished frontend experience with fast iteration on backend features
 - making local setup reliable on Windows for repeated testing and demos
 
-## Accomplishments That We’re Proud Of
+## Accomplishments That We're Proud Of
 
 - built a multi-feature product instead of a single prompt box
 - created a clean, explainable demo flow that judges can follow quickly
-- added mock-safe fallbacks so the app remains usable under pressure
+- added a real local AI mode powered by Ollama
 - turned career prep into a system that feels persistent and personalized
 - packaged the repo with contest-ready assets including a pitch, demo script, and submission brief
 
@@ -62,7 +62,7 @@ The system was built as a connected set of workflows:
 - workflow design matters as much as model integration
 - stable demos require defensive thinking, especially around fallback states and local setup
 
-## What’s Next for CareerCopilot AI
+## What's Next for CareerCopilot AI
 
 - real backend authentication and multi-user persistence
 - job application tracking with Kanban stages
@@ -78,4 +78,4 @@ The system was built as a connected set of workflows:
 - FastAPI
 - Python
 - SQLite
-- OpenAI-compatible API flow
+- Ollama

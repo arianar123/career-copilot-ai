@@ -59,12 +59,12 @@ export function AnalysisResults({ result }: { result: AnalysisResponse }) {
         items={result.rewritten_bullets}
       />
       <RoadmapCard roadmap={result.roadmap} />
-      <section className="card stack">
-        <div>
+      <section className="card stack saved-result-card">
+        <div className="saved-result-copy">
           <span className="eyebrow">Saved result</span>
           <h3>Open or export this report for later.</h3>
         </div>
-        <div className="action-row">
+        <div className="saved-result-actions">
           <Link className="button" href={`/analysis/${result.analysis_id}`}>
             Open analysis page
           </Link>

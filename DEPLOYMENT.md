@@ -3,34 +3,28 @@
 ## Recommended Stack
 
 - Frontend: `Vercel`
-- Backend API: `Render` or `Railway`
+- Backend API: local `FastAPI` for the real Ollama version, or `Render` / `Railway` if you later switch to a hosted model provider
 - Production database: hosted `PostgreSQL`
 
 The app already supports `DATABASE_URL`, so you can swap local SQLite for Postgres in production without changing application code.
 
-## 1. Deploy the Backend
+## 1. Real AI Runtime
 
-### Option A: Render
+### Local Ollama stack
 
-1. Create a new Web Service from the `backend/` folder.
-2. Use:
-   - Build command: `pip install -r requirements.txt`
-   - Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-3. Add environment variables:
-   - `OPENAI_API_KEY`
+1. Install Ollama and pull a model such as `qwen2.5:1.5b`
+2. Run `ollama serve`
+3. Start the backend with:
+   - `uvicorn app.main:app --host 0.0.0.0 --port 8000`
+4. Use environment variables:
    - `DATABASE_URL`
-   - `CORS_ORIGINS=https://your-vercel-domain.vercel.app`
-4. If you do not want real model calls yet, leave `OPENAI_API_KEY` empty and keep demo mode enabled on the frontend.
+   - `CORS_ORIGINS=http://127.0.0.1:3100,http://localhost:3100`
+   - `OLLAMA_BASE_URL=http://127.0.0.1:11434`
+   - `OLLAMA_MODEL=qwen2.5:1.5b`
 
-### Option B: Railway
+### Hosted option later
 
-1. Create a new service from the `backend/` folder.
-2. Railway can use the same start command:
-   - `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-3. Add the same environment variables:
-   - `OPENAI_API_KEY`
-   - `DATABASE_URL`
-   - `CORS_ORIGINS=https://your-vercel-domain.vercel.app`
+If you want a fully hosted AI deployment later, replace the local model layer with a hosted inference provider, then deploy the backend to `Render` or `Railway`.
 
 ## 2. Deploy the Frontend
 
@@ -40,8 +34,15 @@ The app already supports `DATABASE_URL`, so you can swap local SQLite for Postgr
 2. Set the framework to `Next.js`.
 3. Add environment variables:
    - `NEXT_PUBLIC_API_BASE_URL=https://your-backend-domain`
-   - `NEXT_PUBLIC_DEMO_MODE=false` when a real backend key is configured
+   - `NEXT_PUBLIC_DEMO_MODE=false` when a live backend is configured
 4. Deploy.
+
+For a stable contest submission, the safest public setup is:
+
+- deploy the frontend
+- keep `NEXT_PUBLIC_DEMO_MODE=true`
+- use the public site as the judging link
+- use the local Ollama stack for the real AI version during development or live demos
 
 ## 3. Production Database
 
@@ -61,7 +62,7 @@ If your host provides a plain Postgres URL, update the SQLAlchemy driver as need
 - Backend `/docs` loads correctly
 - Frontend points to the deployed backend URL
 - CORS includes the deployed frontend domain
-- Demo banner is disabled only when a valid `OPENAI_API_KEY` is configured
+- Demo banner is disabled only when a live backend is configured
 - At least one resume analysis and one mock interview flow succeed in production
 
 ## 5. Suggested Portfolio Setup
