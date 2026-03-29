@@ -1,0 +1,1 @@
+Generate a practical 30 / 60 / 90 day career roadmap based on a student's current resume, target role, and skill gaps.
