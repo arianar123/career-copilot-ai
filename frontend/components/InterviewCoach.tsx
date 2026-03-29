@@ -13,6 +13,9 @@ import { DownloadSummaryButton } from "./DownloadSummaryButton";
 import { demoInterviewAnswer, demoResumeText } from "../lib/demoData";
 import { useUserProfile } from "./UserProfileProvider";
 
+const isDemoMode =
+  (process.env.NEXT_PUBLIC_DEMO_MODE ?? "true").toLowerCase() !== "false";
+
 function buildInterviewSummary(
   targetRole: string,
   question: string,
@@ -127,11 +130,13 @@ export function InterviewCoach() {
           <h2>Generate tailored mock questions and get AI-style coaching.</h2>
         </div>
 
-        <div className="action-row">
-          <button className="button secondary" type="button" onClick={loadDemoInterview}>
-            Load demo data
-          </button>
-        </div>
+        {isDemoMode ? (
+          <div className="action-row">
+            <button className="button secondary" type="button" onClick={loadDemoInterview}>
+              Load demo data
+            </button>
+          </div>
+        ) : null}
 
         <label className="field">
           <span>Target role</span>
@@ -160,9 +165,11 @@ export function InterviewCoach() {
 
         {error ? <p>{error}</p> : null}
 
-        <p className="helper-copy">
-          Tip: load the demo scenario, generate questions, then score the sample answer.
-        </p>
+        {isDemoMode ? (
+          <p className="helper-copy">
+            Tip: load the demo scenario, generate questions, then score the sample answer.
+          </p>
+        ) : null}
       </form>
 
       {questions.length > 0 ? (

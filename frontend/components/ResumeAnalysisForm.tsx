@@ -11,6 +11,9 @@ import { demoJobDescription, demoResumeText } from "../lib/demoData";
 import { AnalysisResults } from "./AnalysisResults";
 import { useUserProfile } from "./UserProfileProvider";
 
+const isDemoMode =
+  (process.env.NEXT_PUBLIC_DEMO_MODE ?? "true").toLowerCase() !== "false";
+
 export function ResumeAnalysisForm() {
   const { profile, hydrated } = useUserProfile();
   const [resumeText, setResumeText] = useState("");
@@ -92,11 +95,13 @@ export function ResumeAnalysisForm() {
           <h2>Upload a resume or paste the text, then compare it to a target role.</h2>
         </div>
 
-        <div className="action-row">
-          <button className="button secondary" type="button" onClick={loadDemoScenario}>
-            Load demo data
-          </button>
-        </div>
+        {isDemoMode ? (
+          <div className="action-row">
+            <button className="button secondary" type="button" onClick={loadDemoScenario}>
+              Load demo data
+            </button>
+          </div>
+        ) : null}
 
         <label className="field">
           <span>Target role</span>
@@ -166,9 +171,11 @@ export function ResumeAnalysisForm() {
 
         {error ? <p>{error}</p> : null}
 
-        <p className="helper-copy">
-          Tip: use <strong>Load demo data</strong> for a quick portfolio walkthrough.
-        </p>
+        {isDemoMode ? (
+          <p className="helper-copy">
+            Tip: use <strong>Load demo data</strong> for a quick portfolio walkthrough.
+          </p>
+        ) : null}
       </form>
 
       {result ? (

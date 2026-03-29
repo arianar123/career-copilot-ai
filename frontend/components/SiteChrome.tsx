@@ -6,6 +6,8 @@ import { useUserProfile } from "./UserProfileProvider";
 
 const isDemoMode =
   (process.env.NEXT_PUBLIC_DEMO_MODE ?? "true").toLowerCase() !== "false";
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+const apiDocsUrl = apiBaseUrl ? `${apiBaseUrl.replace(/\/$/, "")}/docs` : "";
 
 export function SiteChrome() {
   const { session, hydrated: authHydrated, signOut } = useAuth();
@@ -47,7 +49,11 @@ export function SiteChrome() {
           <Link href="/interview">Interview</Link>
           <Link href="/workspace">Workspace</Link>
           <Link href="/signin">{session ? "Switch user" : "Sign in"}</Link>
-          <a href="http://localhost:8000/docs">API</a>
+          {apiDocsUrl ? (
+            <a href={apiDocsUrl} target="_blank" rel="noreferrer">
+              API
+            </a>
+          ) : null}
           {session ? (
             <button className="nav-button" type="button" onClick={signOut}>
               Sign out

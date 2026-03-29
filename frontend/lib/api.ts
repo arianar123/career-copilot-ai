@@ -56,8 +56,10 @@ export type MarketResponse = {
   recommended_focus: string[];
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 const DEMO_MODE = (process.env.NEXT_PUBLIC_DEMO_MODE ?? "true").toLowerCase() !== "false";
+const API_PLACEHOLDER =
+  !API_BASE_URL || API_BASE_URL.includes("your-") || API_BASE_URL.includes("localhost");
 
 const mockAnalysis: AnalysisResponse = {
   analysis_id: "demo-analysis-001",
@@ -170,7 +172,7 @@ function buildMockMarketSnapshot(payload: {
 }
 
 function shouldUseMock() {
-  return DEMO_MODE || !API_BASE_URL || API_BASE_URL.includes("your-");
+  return DEMO_MODE;
 }
 
 async function safeFetchJson<T>(
@@ -182,14 +184,26 @@ async function safeFetchJson<T>(
     return fallback;
   }
 
+  if (API_PLACEHOLDER) {
+    throw new Error("CareerCopilot API is not configured yet.");
+  }
+
   try {
     const response = await fetch(url, init);
     if (!response.ok) {
-      return fallback;
+      let detail = "Request failed.";
+      try {
+        const payload = (await response.json()) as { detail?: string };
+        detail = payload.detail || detail;
+      } catch {}
+      throw new Error(detail);
     }
     return (await response.json()) as T;
-  } catch {
-    return fallback;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("CareerCopilot could not reach the API.");
   }
 }
 

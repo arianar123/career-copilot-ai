@@ -10,6 +10,7 @@ from ..repositories.analysis_repository import (
 )
 from ..schemas.analysis import AnalysisRequest, AnalysisResponse, AnalysisSummary
 from ..services.llm_service import generate_analysis
+from ..services.service_errors import ExternalServiceError, ServiceConfigurationError
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
@@ -18,7 +19,12 @@ router = APIRouter(prefix="/analysis", tags=["analysis"])
 def run_analysis(
     payload: AnalysisRequest, db: Session = Depends(get_db)
 ) -> AnalysisResponse:
-    response = generate_analysis(payload)
+    try:
+        response = generate_analysis(payload)
+    except ServiceConfigurationError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except ExternalServiceError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
     return create_analysis(db, payload, response)
 
 

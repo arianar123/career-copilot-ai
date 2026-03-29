@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { getMarketSnapshot, type MarketResponse } from "../lib/api";
 import { useUserProfile } from "./UserProfileProvider";
 
+const isDemoMode =
+  (process.env.NEXT_PUBLIC_DEMO_MODE ?? "true").toLowerCase() !== "false";
+
 export function MarketSnapshot() {
   const { profile, hydrated } = useUserProfile();
   const [targetRole, setTargetRole] = useState("Data Analyst Intern");
@@ -56,11 +59,13 @@ export function MarketSnapshot() {
           <h2>See what skills and signals are rising for your target role.</h2>
         </div>
 
-        <div className="action-row">
-          <button className="button secondary" type="button" onClick={loadDemoMarket}>
-            Load demo market
-          </button>
-        </div>
+        {isDemoMode ? (
+          <div className="action-row">
+            <button className="button secondary" type="button" onClick={loadDemoMarket}>
+              Load demo market
+            </button>
+          </div>
+        ) : null}
 
         <label className="field">
           <span>Target role</span>
@@ -88,9 +93,11 @@ export function MarketSnapshot() {
         </div>
 
         {error ? <p>{error}</p> : null}
-        <p className="helper-copy">
-          Tip: this is a mock-backed intelligence view designed for safe live demos.
-        </p>
+        {isDemoMode ? (
+          <p className="helper-copy">
+            Tip: this is a mock-backed intelligence view designed for safe live demos.
+          </p>
+        ) : null}
       </form>
 
       {result ? (
