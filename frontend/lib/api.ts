@@ -59,7 +59,7 @@ export type MarketResponse = {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 const DEMO_MODE = (process.env.NEXT_PUBLIC_DEMO_MODE ?? "true").toLowerCase() !== "false";
 const API_PLACEHOLDER =
-  !API_BASE_URL || API_BASE_URL.includes("your-") || API_BASE_URL.includes("localhost");
+  !API_BASE_URL || API_BASE_URL.includes("your-");
 
 const mockAnalysis: AnalysisResponse = {
   analysis_id: "demo-analysis-001",
