@@ -1,21 +1,32 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { AnalysisHistoryCard } from "../../components/AnalysisHistoryCard";
 import { DashboardInsights } from "../../components/DashboardInsights";
-import { listRecentAnalyses, type AnalysisSummary } from "../../lib/api";
+import { useAuth } from "../../components/AuthProvider";
+import {
+  loadAnalysisHistory
+} from "../../lib/analysisHistory";
+import type { AnalysisSummary } from "../../lib/api";
 
-export default async function DashboardPage() {
-  let analyses: AnalysisSummary[] = [];
-  let error = "";
+export default function DashboardPage() {
+  const { session, hydrated } = useAuth();
+  const [analyses, setAnalyses] = useState<AnalysisSummary[]>([]);
 
-  try {
-    analyses = await listRecentAnalyses();
-  } catch (dashboardError) {
-    error =
-      dashboardError instanceof Error
-        ? dashboardError.message
-        : "Could not load the dashboard.";
-  }
+  useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+
+    if (!session?.email) {
+      setAnalyses([]);
+      return;
+    }
+
+    setAnalyses(loadAnalysisHistory(session.email));
+  }, [hydrated, session?.email]);
 
   return (
     <main className="page-shell">
@@ -36,7 +47,14 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      {analyses.length > 0 ? (
+      {!hydrated ? (
+        <section className="card empty">Loading your dashboard...</section>
+      ) : !session ? (
+        <section className="card empty">
+          Sign in to keep a persistent analysis history. Signed-out sessions can still
+          run reports, but they do not save to the dashboard.
+        </section>
+      ) : analyses.length > 0 ? (
         <>
           <DashboardInsights analyses={analyses} />
           <section className="grid two">
@@ -47,7 +65,8 @@ export default async function DashboardPage() {
         </>
       ) : (
         <section className="card empty">
-          {error || "No saved analyses yet. Run your first report to populate the dashboard."}
+          No saved analyses yet for this account. Run a report while signed in to
+          populate your dashboard.
         </section>
       )}
     </main>

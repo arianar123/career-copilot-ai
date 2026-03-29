@@ -7,14 +7,20 @@ import {
   type AnalysisResponse,
   type ResumeUploadResponse
 } from "../lib/api";
+import {
+  buildAnalysisSummaryRecord,
+  saveAnalysisToHistory
+} from "../lib/analysisHistory";
 import { demoJobDescription, demoResumeText } from "../lib/demoData";
 import { AnalysisResults } from "./AnalysisResults";
+import { useAuth } from "./AuthProvider";
 import { useUserProfile } from "./UserProfileProvider";
 
 const isDemoMode =
   (process.env.NEXT_PUBLIC_DEMO_MODE ?? "true").toLowerCase() !== "false";
 
 export function ResumeAnalysisForm() {
+  const { session } = useAuth();
   const { profile, hydrated } = useUserProfile();
   const [resumeText, setResumeText] = useState("");
   const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -75,6 +81,14 @@ export function ResumeAnalysisForm() {
         target_role: targetRole,
         job_description: jobDescription
       });
+
+      if (session?.email) {
+        saveAnalysisToHistory(
+          session.email,
+          buildAnalysisSummaryRecord(analysis, targetRole)
+        );
+      }
+
       setResult(analysis);
     } catch (submissionError) {
       setError(
